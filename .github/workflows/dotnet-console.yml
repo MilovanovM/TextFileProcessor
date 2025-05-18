@@ -6,15 +6,19 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   build:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
         
@@ -28,7 +32,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
       
     - name: Test Report
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: success() || failure()    # run this step even if previous step failed
       with:
         name: .NET Test Results
